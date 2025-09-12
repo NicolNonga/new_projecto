@@ -1,15 +1,116 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/prisma"
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
+}
+
+model Pedido {
+  id_pedido                     Int      @id @default(autoincrement())
+  codigo_multas                 String?  @db.VarChar(20)
+  codigo_regime                 String?  @db.VarChar(50)
+  consignatario_importador      String?  @db.VarChar(255)
+  codigo_avaliacao_autorizado   String?  @db.VarChar(255)
+  nome_entidade_angola          String?  @db.VarChar(100)
+  manifesto_numero              String?  @db.VarChar(50)
+  numero_total_adicoes          Int?
+  despachante                   String?  @db.VarChar(100)
+  entidade_estrangeira          String?  @db.VarChar(100)
+  descricao_mercadoria          String?  @db.Text
+  pais_origem                   String?  @db.VarChar(50)
+  pais_destino                  String?  @db.VarChar(50)
+  porto_entrada                 String?  @db.VarChar(100)
+  data_chegada                  DateTime?
+  numero_fatura_proforma        String?  @db.VarChar(100)
+  createdAt                     DateTime @default(now())
+  updatedAt                     DateTime @updatedAt
+
+  // Relacionamentos
+  transportes  Transporte[]
+  mercadorias  Mercadoria[]
+  pagamentos   Pagamento[]
+  documentos   Documento[]
+
+  @@map("pedido")
+}
+
+model Transporte {
+  id_transporte                Int      @id @default(autoincrement())
+  pedido_id                    Int
+  meio_transporte              String?  @db.VarChar(100)
+  nacionalidade_meio_transporte String? @db.VarChar(100)
+  registro_meio_transporte     String?  @db.VarChar(100)
+  num_documento_transporte     String?  @db.VarChar(100)
+  estancia_aduaneira           String?  @db.VarChar(100)
+  porto_origem                 String?  @db.VarChar(100)
+  posto_fronteirico            String?  @db.VarChar(100)
+  peso_bruto                   Decimal? @db.Decimal(10, 2)
+  local_embarque               String?  @db.VarChar(100)
+  local_desalfandegamento      String?  @db.VarChar(100)
+  pais_precedencia             String?  @db.VarChar(100)
+  referencia_processo_interno  String?  @db.VarChar(50)
+  createdAt                    DateTime @default(now())
+  updatedAt                    DateTime @updatedAt
+
+  // Relacionamentos
+  pedido Pedido @relation(fields: [pedido_id], references: [id_pedido], onDelete: Cascade)
+
+  @@map("transporte")
+}
+
+model Mercadoria {
+  id_mercadoria      Int      @id @default(autoincrement())
+  pedido_id          Int
+  linha              Int?
+  codigo_pautal      String?  @db.VarChar(100)
+  quantidade         Int?
+  pais_origem_2      String?  @db.VarChar(100)
+  peso               Decimal? @db.Decimal(10, 2)
+  moeda_estrangeira  String?  @db.VarChar(10)
+  valor_fob          Decimal? @db.Decimal(10, 2)
+  valor_frete        Decimal? @db.Decimal(10, 2)
+  valor_cif          Decimal? @db.Decimal(10, 2)
+  unidade_medida     String?  @db.VarChar(20)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  // Relacionamentos
+  pedido Pedido @relation(fields: [pedido_id], references: [id_pedido], onDelete: Cascade)
+
+  @@map("mercadoria")
+}
+
+model Pagamento {
+  id_pagamento     Int      @id @default(autoincrement())
+  pedido_id        Int
+  metodo_avaliacao String?  @db.VarChar(100)
+  banco_comercial  String?  @db.VarChar(100)
+  forma_pagamento  String?  @db.VarChar(100)
+  qtd_volume       Int?
+  codigo_volume    String?  @db.VarChar(50)
+  unidade          String?  @db.VarChar(20)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  // Relacionamentos
+  pedido Pedido @relation(fields: [pedido_id], references: [id_pedido], onDelete: Cascade)
+
+  @@map("pagamento")
+}
+
+model Documento {
+  id_documento             Int      @id @default(autoincrement())
+  pedido_id                Int
+  tipo_documento           String?  @db.VarChar(50)
+  caminho_arquivo          String?  @db.VarChar(255)
+  codigo_pre_licenciamento String?  @db.VarChar(100)
+  createdAt                DateTime @default(now())
+  updatedAt                DateTime @updatedAt
+
+  // Relacionamentos
+  pedido Pedido @relation(fields: [pedido_id], references: [id_pedido], onDelete: Cascade)
+
+  @@map("documento")
 }
