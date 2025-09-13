@@ -29,13 +29,15 @@ export default class PedidoController{
         database.pedido.findMany({
           skip,
           take: limit,
+          
           include: {
+          transportes: true,
+          mercadorias: true,
+          pagamentos: true,
+          documentos: true,
             _count: {
               select: {
-                transportes: true,
                 mercadorias: true,
-                pagamentos: true,
-                documentos: true
               }
             }
           },
@@ -45,7 +47,6 @@ export default class PedidoController{
       ]);
 
       response.json({
-        success: true,
         data: pedidos,
         pagination: {
           current_page: limit,
