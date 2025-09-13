@@ -114,3 +114,114 @@ model Documento {
 
   @@map("documento")
 }
+
+
+model CodigoMulta {
+  id        String   @id @default(cuid())  // Identificador único com cuid()
+  codigo    String   @unique @db.VarChar(50)  // Campo único, limite de 50 caracteres
+  descricao String   @db.Text  // Descrição como texto longo
+  createdAt DateTime @default(now())  // Data de criação com valor padrão de "agora"
+  updatedAt DateTime @updatedAt  // Data de atualização automática
+
+  @@map("codigo_multa")  // Mapeamento para o nome da tabela no banco de dados
+}
+
+model CodigoRegime {
+  id        String   @id @default(cuid())
+  codigo    String   @unique @db.VarChar(50)
+  descricao String   @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("codigo_regime")
+}
+
+model NacionalidadeMeioTransporte {
+  id        String   @id @default(cuid())
+  codigo    String   @unique @db.VarChar(50)
+  descricao String   @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("nacionalidade_meio_transporte")
+}
+
+model PaisOrigem {
+  id        String   @id @default(cuid())
+  codigo    String   @unique @db.VarChar(50)
+  descricao String   @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("pais_origem")
+}
+
+model PaisDestino {
+  id        String   @id @default(cuid())
+  codigo    String   @unique @db.VarChar(50)
+  descricao String   @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("pais_destino")
+}
+
+model PortoEntradaSaida {
+  id        String   @id @default(cuid())
+  codigo    String   @unique @db.VarChar(50)
+  descricao String   @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("porto_entrada_saida")
+}
+
+model MeioTransporte {
+  id        String   @id @default(cuid())
+  codigo    String   @unique @db.VarChar(50)
+  descricao String   @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("meio_transporte")
+}
+
+model EstanciaAduaneira {
+  id        String   @id @default(cuid())
+  codigo    String   @unique @db.VarChar(50)
+  descricao String   @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("estancia_aduaneira")
+}
+
+model PostoFronteirico {
+  id        String   @id @default(cuid())
+  codigo    String   @unique @db.VarChar(50)
+  descricao String   @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("posto_fronteirico")
+}
+
+model LocalEmbarque {
+  id        String   @id @default(cuid())
+  codigo    String   @unique @db.VarChar(50)
+  descricao String   @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("local_embarque")
+}
+
+model PaisProcedencia {
+  id        String   @id @default(cuid())
+  codigo    String   @unique @db.VarChar(50)
+  descricao String   @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("pais_procedencia")
+}
