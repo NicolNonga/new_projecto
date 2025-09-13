@@ -8,7 +8,7 @@ export class PedidoRepository {
 async create(data: CreatePedidoRequest) {
   const { transporte, mercadorias, pagamento, documento, ...pedidoData } = data;
   
-  console.log(transporte, mercadorias, pagamento)
+
   try {
     return await database.$transaction(async (tx: Prisma.TransactionClient) => {
       // 1. Criar pedido principal
@@ -22,42 +22,42 @@ async create(data: CreatePedidoRequest) {
       });
 
       // 2. Criar transporte (único)
-      // const transporteCriado = await tx.transporte.create({
-      //   data: {
-      //     ...transporte,
-      //     pedido_id: pedido.id_pedido,
-      //   },
-      // });
+      const transporteCriado = await tx.transporte.create({
+        data: {
+          ...transporte,
+          pedido_id: pedido.id_pedido,
+        },
+      });
 
       // 3. Criar mercadorias (array)
-      // const mercadoriasCriadas = await Promise.all(
-      //   mercadorias.map((mercadoria) =>
-      //     tx.mercadoria.create({
-      //       data: {
-      //         ...mercadoria,
-      //         pedido_id: pedido.id_pedido,
-      //       },
-      //     })
-      //   )
-      // );
+      const mercadoriasCriadas = await Promise.all(
+        mercadorias.map((mercadoria) =>
+          tx.mercadoria.create({
+            data: {
+              ...mercadoria,
+              pedido_id: pedido.id_pedido,
+            },
+          })
+        )
+      );
 
-      // 4. Criar pagamento (único)
-      // const pagamentoCriado = await tx.pagamento.create({
-      //   data: {
-      //     ...pagamento,
-      //     pedido_id: pedido.id_pedido,
-      //   },
-      // });
+      
+      const pagamentoCriado = await tx.pagamento.create({
+        data: {
+          ...pagamento,
+          pedido_id: pedido.id_pedido,
+        },
+      });
 
       // 5. Criar documento (único opcional)
-      // const documentoCriado = documento 
-      //   ? await tx.documento.create({
-      //       data: {
-      //         ...documento,
-      //         pedido_id: pedido.id_pedido,
-      //       },
-      //     })
-      //   : null;
+      const documentoCriado = documento 
+        ? await tx.documento.create({
+            data: {
+              ...documento,
+              pedido_id: pedido.id_pedido,
+            },
+          })
+        : null;
 
       // 6. Retornar pedido completo
       return {
