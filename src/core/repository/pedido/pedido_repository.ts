@@ -6,8 +6,9 @@ import { PedidoFiltrosInterface } from "../../interfaces/pedidoInterface";
 export class PedidoRepository {
   
   // Criar pedido completo com todas as entidades relacionadas
-async create(data: CreatePedidoRequest) {
-  const { transporte, mercadorias, pagamento, documento, ...pedidoData } = data;
+async create(data: CreatePedidoRequest, url_documento: string) {
+   const {numero_total_adicoes} = data
+  const { transporte, mercadorias, pagamento, documento, ...pedidoData } = data
   
 
   try {
@@ -16,6 +17,7 @@ async create(data: CreatePedidoRequest) {
       const pedido = await tx.pedido.create({
         data: {
           ...pedidoData,
+          numero_total_adicoes: Number(pedidoData.numero_total_adicoes),
           data_chegada: pedidoData.data_chegada
             ? new Date(pedidoData.data_chegada)
             : undefined,
@@ -55,6 +57,7 @@ async create(data: CreatePedidoRequest) {
         ? await tx.documento.create({
             data: {
               ...documento,
+              caminho_arquivo: url_documento,
               pedido_id: pedido.id_pedido,
             },
           })

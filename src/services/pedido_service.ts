@@ -1,7 +1,7 @@
 import { da } from "zod/v4/locales";
 import { PedidoRepository } from "../core/repository/pedido/pedido_repository";
 import { CreatePedidoRequest } from "../validations/pedido_validacao";
-import { PedidoFiltrosInterface } from "../core/interfaces/pedidoInterface";
+import { PedidoFiltrosInterface, PedidoPlayloadInterface } from "../core/interfaces/pedidoInterface";
 
 export class PedidoService {
     private readonly pedidoRepository : PedidoRepository
@@ -10,10 +10,13 @@ export class PedidoService {
 
     }
 
-    async criarPedido(data:CreatePedidoRequest){
+    async criarPedido(data:PedidoPlayloadInterface, ){
 
+        
+        console.log(data)
+    
 
-          const pedidoCriado = await this.pedidoRepository.create(data)
+          const pedidoCriado = await this.pedidoRepository.create(data.payload, data.caminho_arquivo)
              return {
                 sucesso: true,
                 data: pedidoCriado,

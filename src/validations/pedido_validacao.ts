@@ -48,7 +48,6 @@ export const pagamentoSchema = z.object({
 // Schema para Documento
 export const documentoSchema = z.object({
   tipo_documento: z.string().max(50).optional(),
-  caminho_arquivo: z.string().max(255).optional(),
   codigo_pre_licenciamento: z.string().max(100).optional(),
 });
 
