@@ -1,7 +1,12 @@
 import { database } from "./config/database";
 import { zodErrorHandler } from "./middleware/zod_error_handler";
 
+import swaggerUi from "swagger-ui-express";
+import * as swaggerDocument from "./swagger.json";
+
+
 const express = require('express');
+
 const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
@@ -37,7 +42,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Rotas principais
 app.use('/api', routerApplicaction);
-
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 // 404 handler (ajustado)
 // app.use((req, res) => {
 //   res.status(404).json({
