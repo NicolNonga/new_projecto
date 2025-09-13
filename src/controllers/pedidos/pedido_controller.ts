@@ -14,25 +14,12 @@ export default class PedidoController{
 
 
    const file  = request.file;
-   console.log(file)
+   console.log(JSON.parse(request.body.data))
    const caminho_arquivo = `/uploads/${file?.originalname}`;
-    const transporte = request.body.transporte ? JSON.parse(request.body.transporte) : undefined;
-    const mercadorias = request.body.mercadorias ? JSON.parse(request.body.mercadorias) : undefined;
-    const pagamento = request.body.pagamento ? JSON.parse(request.body.pagamento) : undefined;
-    const documento = request.body.documento ? JSON.parse(request.body.documento) : undefined;
+ 
 
-        // Campos simples e numéricos
-    // const numero_total_adicoes = req.body.numero_total_adicoes ? Number(req.body.numero_total_adicoes) : undefined;
-    // const data_chegada = req.body.data_chegada ? new Date(req.body.data_chegada) : undefined;
-
-    // Montar payload final
-    const payload = {
-      transporte,
-      mercadorias,
-      pagamento,
-      documento,
-
-    };
+    const payload = JSON.parse(request.body.data);
+    console.log(payload)
 
     const result = await this.pedidoService.criarPedido({payload, caminho_arquivo: caminho_arquivo})
 
