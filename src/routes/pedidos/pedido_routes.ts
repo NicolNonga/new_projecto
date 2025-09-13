@@ -1,6 +1,6 @@
 import PedidoController from "../../controllers/pedidos/pedido_controller";
 import { validationMiddleware } from "../../middleware/validacao_middleware";
-import { PedidoService } from "../../services/pedidoService";
+import { PedidoService } from "../../services/pedido_service";
 import { createPedidoSchema } from "../../validations/pedido_validacao";
 import express from "express";
  const pedidoService  = new PedidoService()
