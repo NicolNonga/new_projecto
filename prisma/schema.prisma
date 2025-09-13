@@ -7,6 +7,19 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model EstadoPedidoLicenciamento {
+  id          String   @id @default(cuid())
+  nome        String   @unique
+  descricao   String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relação com Pedido
+  pedidos     Pedido[]
+
+  @@map("estado_pedido_licenciamento")
+}
+
 model Pedido {
   id_pedido                     Int      @id @default(autoincrement())
   codigo_multas                 String?  @db.VarChar(20)
@@ -24,6 +37,7 @@ model Pedido {
   porto_entrada                 String?  @db.VarChar(100)
   data_chegada                  DateTime?
   numero_fatura_proforma        String?  @db.VarChar(100)
+  estado_id                     String? 
   createdAt                     DateTime @default(now())
   updatedAt                     DateTime @updatedAt
 
@@ -32,6 +46,8 @@ model Pedido {
   mercadorias  Mercadoria[]
   pagamentos   Pagamento[]
   documentos   Documento[]
+
+  estado       EstadoPedidoLicenciamento? @relation(fields: [estado_id], references: [id], onDelete: SetNull)
 
   @@map("pedido")
 }

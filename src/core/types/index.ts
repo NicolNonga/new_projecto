@@ -1,3 +1,11 @@
+export interface EstadoPedidoLicenciamento {
+  id: string;
+  nome: string;
+  descricao?: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 export interface CodigoMulta {
   id?: string;
   codigo: string;
