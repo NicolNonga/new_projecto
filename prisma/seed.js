@@ -151,7 +151,6 @@ async function main() {
 
   console.log('Seed concluído com sucesso!');
 
-
 }
 
 main()

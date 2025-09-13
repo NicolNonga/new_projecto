@@ -1,8 +1,8 @@
 
 import { Request, Response } from "express";
-import { PedidoService } from "../../services/pedidoService";
-import { CreatePedidoRequest, createPedidoSchema } from "../../validations/pedido_validacao";
-import { database } from "../../config/database";
+import { PedidoService } from "../../../application/services/Pedido/pedidoService";
+import { CreatePedidoRequest, createPedidoSchema } from "../../../validations/pedido_validacao";
+import { database } from "../../../infrastructure/config/database";
 export default class PedidoController{
 
   constructor(private pedidoService: PedidoService){

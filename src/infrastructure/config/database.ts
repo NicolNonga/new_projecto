@@ -1,7 +1,6 @@
 import { PrismaClient} from "@prisma/client";
 
 
-
   let database: PrismaClient
 
  

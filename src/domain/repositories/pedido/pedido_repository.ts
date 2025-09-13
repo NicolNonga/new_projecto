@@ -1,5 +1,5 @@
 import { Prisma } from "@prisma/client";
-import { database } from "../../../config/database";
+import { database } from "../../../infrastructure/config/database";
 import { CreatePedidoRequest, PedidoQuery } from "../../../validations/pedido_validacao";
 
 export class PedidoRepository {

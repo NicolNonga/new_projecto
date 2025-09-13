@@ -1,42 +1,38 @@
-import { database } from "./config/database";
-import { zodErrorHandler } from "./middleware/zod_error_handler";
+import { database } from "./infrastructure/config/database";
+import { zodErrorHandler } from "./presentation/middleware/zod_error_handler";
+import { routerApplicaction } from "./presentation/routes";
 
-const express = require('express');
-const cors = require('cors');
-const helmet = require('helmet');
-const rateLimit = require('express-rate-limit');
+const express = require("express");
+const cors = require("cors");
+const helmet = require("helmet");
+const rateLimit = require("express-rate-limit");
 
-
-require('dotenv').config();
-
-
-import { routerApplicaction } from "./routes";
+require("dotenv").config();
 
 // const { connectDB } = require('./config/database');
-const routes = require('./routes');
-const errorHandler = require('./middleware/errorHandler');
+// const routes = require("./routes");
+const errorHandler = require("../src/presentation/middleware/errorHandler");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Rate limiting
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, 
-  max: 100 
+  windowMs: 15 * 60 * 1000,
+  max: 100,
 });
 
 // Middlewares
 app.use(helmet());
 app.use(cors());
 app.use(limiter);
-app.use(express.json({ limit: '10mb' }));
+app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true }));
 
 // Logger no modo desenvolvimento
 
-
 // Rotas principais
-app.use('/api', routerApplicaction);
+app.use("/api", routerApplicaction);
 
 // 404 handler (ajustado)
 // app.use((req, res) => {
@@ -47,9 +43,8 @@ app.use('/api', routerApplicaction);
 // });
 
 // Middleware de erros
-app.use(zodErrorHandler)
+app.use(zodErrorHandler);
 app.use(errorHandler);
-
 
 // Função para iniciar o servidor
 const port: number | string = process.env.PORT || 3000;
@@ -79,5 +74,3 @@ startServer();
 //   await disconnectDB();
 //   process.exit(0);
 // });
-
-
