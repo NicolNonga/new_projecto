@@ -11,6 +11,7 @@ const pedidoRouter =  express.Router()
 
 pedidoRouter.get('/', pedidoController.index);
 pedidoRouter.post('/', uploadMiddleware, pedidoController.criarPedido);
+pedidoRouter.post('/read_file', uploadMiddleware, pedidoController.lerFicheiroText)
 // pedidoRouter.get('/:id', pedidoController.show);
 
 // pedidoRouter.put('/:id', pedidoController.update);

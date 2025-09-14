@@ -2,7 +2,7 @@ import multer from "multer";
 import path from "path";
 import fs from "fs";
 import {Request, Response, NextFunction} from 'express'
-const uploadFolder = path.join(__dirname, "../../uploads");
+const uploadFolder = path.join(__dirname, "../../uploads/");
 if (!fs.existsSync(uploadFolder)) fs.mkdirSync(uploadFolder, { recursive: true });
 
 const storage = multer.diskStorage({

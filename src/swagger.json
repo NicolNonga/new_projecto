@@ -98,7 +98,56 @@
           }
         }
       }
+    },
+    "/pedidos/read_file": {
+      "post": {
+        "tags": ["File"],
+        "summary": "Enviar ficheiro TXT via formData e converter para JSON",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "Ficheiro TXT a ser convertido"
+                  }
+                },
+                "required": ["file"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ficheiro convertido com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean" },
+                    "data": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Nenhum ficheiro enviado"
+          },
+          "500": {
+            "description": "Erro ao processar ficheiro"
+          }
+        }
+      }
     }
+  
   },
   "components": {
     "schemas": {
