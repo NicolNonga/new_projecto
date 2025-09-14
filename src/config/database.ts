@@ -1,17 +1,12 @@
-import { PrismaClient} from "@prisma/client";
+import { PrismaClient } from '@prisma/client';
 
+const prisma = new PrismaClient({
+  log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
+});
 
+export default prisma;
 
-  let database: PrismaClient
-
- 
-  declare global {
-    var _database: PrismaClient | undefined
-  }
-  
-  if(!global._database){
-    global._database = new PrismaClient()
-  }
-  database =  global._database;
-
-  export {database}
+// Graceful shutdown
+process.on('beforeExit', async () => {
+  await prisma.$disconnect();
+});

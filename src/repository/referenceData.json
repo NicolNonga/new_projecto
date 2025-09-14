@@ -1,0 +1,75 @@
+{
+  "CodigoMultas": [
+    { "id": 1, "codigo": "MUL001", "descricao": "Multa por declaração incorreta" },
+    { "id": 2, "codigo": "MUL002", "descricao": "Multa por atraso na declaração" },
+    { "id": 3, "codigo": "MUL003", "descricao": "Multa por documentação incompleta" }
+  ],
+  "CodigoRegime": [
+    { "id": 1, "codigo": "REG40", "descricao": "Regime de importação definitiva" },
+    { "id": 2, "codigo": "REG41", "descricao": "Regime de importação temporária" },
+    { "id": 3, "codigo": "REG42", "descricao": "Regime de trânsito aduaneiro" }
+  ],
+  "NacionalidadeMeioTransporte": [
+    { "id": 1, "codigo": "AO", "descricao": "Angola" },
+    { "id": 2, "codigo": "BR", "descricao": "Brasil" },
+    { "id": 3, "codigo": "CN", "descricao": "China" },
+    { "id": 4, "codigo": "DE", "descricao": "Alemanha" },
+    { "id": 5, "codigo": "PA", "descricao": "Panamá" }
+  ],
+  "PaisOrigem": [
+    { "id": 1, "codigo": "AO", "descricao": "Angola" },
+    { "id": 2, "codigo": "BR", "descricao": "Brasil" },
+    { "id": 3, "codigo": "CN", "descricao": "China" },
+    { "id": 4, "codigo": "DE", "descricao": "Alemanha" },
+    { "id": 5, "codigo": "US", "descricao": "Estados Unidos" },
+    { "id": 6, "codigo": "PT", "descricao": "Portugal" }
+  ],
+  "PaisDestino": [
+    { "id": 1, "codigo": "AO", "descricao": "Angola" },
+    { "id": 2, "codigo": "BR", "descricao": "Brasil" },
+    { "id": 3, "codigo": "ZA", "descricao": "África do Sul" },
+    { "id": 4, "codigo": "NA", "descricao": "Namíbia" }
+  ],
+  "PortoEntradaSaida": [
+    { "id": 1, "codigo": "AOLAD", "descricao": "Porto de Luanda" },
+    { "id": 2, "codigo": "AOLOB", "descricao": "Porto de Lobito" },
+    { "id": 3, "codigo": "AONAM", "descricao": "Porto de Namibe" },
+    { "id": 4, "codigo": "AOCAB", "descricao": "Porto de Cabinda" },
+    { "id": 5, "codigo": "AOSON", "descricao": "Porto do Soyo" }
+  ],
+  "MeiosTransporte": [
+    { "id": 1, "codigo": "MAR", "descricao": "Marítimo" },
+    { "id": 2, "codigo": "AER", "descricao": "Aéreo" },
+    { "id": 3, "codigo": "ROD", "descricao": "Rodoviário" },
+    { "id": 4, "codigo": "FER", "descricao": "Ferroviário" },
+    { "id": 5, "codigo": "FLU", "descricao": "Fluvial" }
+  ],
+  "EstanciasAduaneira": [
+    { "id": 1, "codigo": "LUA001", "descricao": "Luanda Alfândega Principal" },
+    { "id": 2, "codigo": "LOB001", "descricao": "Lobito Alfândega" },
+    { "id": 3, "codigo": "NAM001", "descricao": "Namibe Alfândega" },
+    { "id": 4, "codigo": "CAB001", "descricao": "Cabinda Alfândega" },
+    { "id": 5, "codigo": "HUA001", "descricao": "Huambo Alfândega" }
+  ],
+  "PostoFronteirico": [
+    { "id": 1, "codigo": "FRONT001", "descricao": "Fronteira Marítima Luanda" },
+    { "id": 2, "codigo": "FRONT002", "descricao": "Fronteira Terrestre Norte" },
+    { "id": 3, "codigo": "FRONT003", "descricao": "Fronteira Terrestre Sul" },
+    { "id": 4, "codigo": "FRONT004", "descricao": "Fronteira Aérea Internacional" }
+  ],
+  "LocalEmbarque": [
+    { "id": 1, "codigo": "SHENZHEN", "descricao": "Shenzhen, China" },
+    { "id": 2, "codigo": "HAMBURGO", "descricao": "Hamburgo, Alemanha" },
+    { "id": 3, "codigo": "SANTOS", "descricao": "Santos, Brasil" },
+    { "id": 4, "codigo": "ROTTERDAM", "descricao": "Rotterdam, Holanda" },
+    { "id": 5, "codigo": "DUBAI", "descricao": "Dubai, Emirados Árabes" }
+  ],
+  "PaisProcedencia": [
+    { "id": 1, "codigo": "CN", "descricao": "China" },
+    { "id": 2, "codigo": "DE", "descricao": "Alemanha" },
+    { "id": 3, "codigo": "BR", "descricao": "Brasil" },
+    { "id": 4, "codigo": "US", "descricao": "Estados Unidos" },
+    { "id": 5, "codigo": "AE", "descricao": "Emirados Árabes Unidos" },
+    { "id": 6, "codigo": "NL", "descricao": "Holanda" }
+  ]
+}

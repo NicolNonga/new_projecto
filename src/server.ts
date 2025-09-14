@@ -1,88 +1,52 @@
-import { database } from "./config/database";
-import { zodErrorHandler } from "./middleware/zod_error_handler";
+import app from './app';
+import prisma from './config/database';
 
-import swaggerUi from "swagger-ui-express";
-import * as swaggerDocument from "./swagger.json";
-
-
-const express = require('express');
-
-const cors = require('cors');
-const helmet = require('helmet');
-const rateLimit = require('express-rate-limit');
-
-
-require('dotenv').config();
-
-
-import { routerApplicaction } from "./routes";
-
-// const { connectDB } = require('./config/database');
-const routes = require('./routes');
-const errorHandler = require('./middleware/errorHandler');
-
-const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Rate limiting
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, 
-  max: 100 
-});
+// Test database connection
+async function testDatabaseConnection() {
+  try {
+    await prisma.$connect();
+    console.log('✅ Conexão com o banco de dados estabelecida');
+  } catch (error) {
+    console.error('❌ Erro ao conectar com o banco de dados:', error);
+    process.exit(1);
+  }
+}
 
-// Middlewares
-app.use(helmet());
-app.use(cors());
-app.use(limiter);
-app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ extended: true }));
-
-// Logger no modo desenvolvimento
-
-
-// Rotas principais
-app.use('/api', routerApplicaction);
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-// 404 handler (ajustado)
-// app.use((req, res) => {
-//   res.status(404).json({
-//     success: false,
-//     message: 'Endpoint não encontrado'
-//   });
-// });
-
-// Middleware de erros
-app.use(zodErrorHandler)
-app.use(errorHandler);
-
-
-// Função para iniciar o servidor
-const port: number | string = process.env.PORT || 3000;
-
+// Start server
 async function startServer() {
   try {
-    // 1. Conectar ao banco
-    await database.$connect();
-    console.log("✅ Database connected successfully");
-
-    // 2. Iniciar servidor
-    app.listen(port, () => {
-      console.log(`🚀 Server running on http://localhost:${PORT}`);
+    await testDatabaseConnection();
+    
+    const server = app.listen(PORT, () => {
+      console.log(`🚀 Servidor rodando na porta ${PORT}`);
+      console.log(`📚 Documentação disponível em: http://localhost:${PORT}/health`);
     });
+
+    // Graceful shutdown
+    process.on('SIGTERM', () => {
+      console.log('SIGTERM recebido. Desligando gracefully...');
+      server.close(() => {
+        console.log('Servidor HTTP fechado.');
+        prisma.$disconnect();
+        process.exit(0);
+      });
+    });
+
+    process.on('SIGINT', () => {
+      console.log('SIGINT recebido. Desligando gracefully...');
+      server.close(() => {
+        console.log('Servidor HTTP fechado.');
+        prisma.$disconnect();
+        process.exit(0);
+      });
+    });
+
   } catch (error) {
-    console.error("❌ Failed to connect to the database", error);
-    process.exit(1); // encerra se não conectar
+    console.error('❌ Erro ao iniciar o servidor:', error);
+    process.exit(1);
   }
 }
 
 startServer();
-
-// Graceful shutdown
-// process.on('SIGINT', async () => {
-//   console.log('\n⏹ Desligando servidor...');
-//   const { disconnectDB } = require('./config/database');
-//   await disconnectDB();
-//   process.exit(0);
-// });
-
-

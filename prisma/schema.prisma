@@ -7,221 +7,163 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Despachante {
+  nif                 String   @id @db.VarChar(20)
+  nome                String   @db.VarChar(255)
+  sexo                String   @db.VarChar(10)
+  email               String   @unique @db.VarChar(255)
+  bilhete_identidade  String   @unique @db.VarChar(50)
+  telefone            String   @db.VarChar(20)
+  perfil              String   @db.VarChar(100)
+  created_at          DateTime @default(now())
+  updated_at          DateTime @updatedAt
+
+  fiabilizacao        Fiabilidade?
+  despachante_empresas DespachanteEmpresa[]
+
+  @@map("despachantes")
+}
+
+model Fiabilidade {
+  cedula_despachante  String   @id @db.VarChar(50)
+  nif_despachante     String   @unique @db.VarChar(20)
+  descricao           String   @db.Text
+  emissao             DateTime
+  validade            DateTime
+  resgate             DateTime?
+  valor               Float
+  created_at          DateTime @default(now())
+  updated_at          DateTime @updatedAt
+
+  despachante         Despachante @relation(fields: [nif_despachante], references: [nif], onDelete: Cascade)
+
+  @@map("fiabilizacoes")
+}
+
+model Empresa {
+  nif                 String   @id @db.VarChar(20)
+  nome                String   @db.VarChar(255)
+  endereco            String?  @db.VarChar(500)
+  telefone            String?  @db.VarChar(20)
+  email               String?  @db.VarChar(255)
+  created_at          DateTime @default(now())
+  updated_at          DateTime @updatedAt
+
+  despachante_empresas DespachanteEmpresa[]
+
+  @@map("empresas")
+}
+
+model DespachanteEmpresa {
+  id                  Int      @id @default(autoincrement())
+  nif_despachante     String   @db.VarChar(20)
+  nif_empresa         String   @db.VarChar(20)
+  data_associacao     DateTime @default(now())
+  ativo               Boolean  @default(true)
+  cargo               String?  @db.VarChar(100)
+  created_at          DateTime @default(now())
+  updated_at          DateTime @updatedAt
+
+  despachante         Despachante @relation(fields: [nif_despachante], references: [nif], onDelete: Cascade)
+  empresa             Empresa @relation(fields: [nif_empresa], references: [nif], onDelete: Cascade)
+  pedidos             Pedido[]
+
+  @@unique([nif_despachante, nif_empresa])
+  @@map("despachante_empresas")
+}
+
 model Pedido {
   id_pedido                     Int      @id @default(autoincrement())
-  codigo_multas                 String?  @db.VarChar(20)
-  codigo_regime                 String?  @db.VarChar(50)
-  consignatario_importador      String?  @db.VarChar(255)
-  codigo_avaliacao_autorizado   String?  @db.VarChar(255)
-  nome_entidade_angola          String?  @db.VarChar(100)
-  manifesto_numero              String?  @db.VarChar(50)
-  numero_total_adicoes          Int?
-  despachante                   String?  @db.VarChar(100)
-  entidade_estrangeira          String?  @db.VarChar(100)
-  descricao_mercadoria          String?  @db.Text
-  pais_origem                   String?  @db.VarChar(50)
-  pais_destino                  String?  @db.VarChar(50)
-  porto_entrada                 String?  @db.VarChar(100)
-  data_chegada                  DateTime?
-  numero_fatura_proforma        String?  @db.VarChar(100)
-  createdAt                     DateTime @default(now())
-  updatedAt                     DateTime @updatedAt
+  codigo_multas                 String   @db.VarChar(50)
+  codigo_regime                 String   @db.VarChar(50)
+  consignatario_importador      String   @db.VarChar(255)
+  codigo_avaliacao_autorizado   String   @db.VarChar(50)
+  nome_entidade_angola          String   @db.VarChar(255)
+  manifesto_numero              String   @db.VarChar(100)
+  numero_total_adicoes          Int
+  despachante_empresa_id        Int
+  entidade_estrangeira          String   @db.VarChar(255)
+  descricao_mercadoria          String   @db.Text
+  pais_origem                   String   @db.VarChar(100)
+  pais_destino                  String   @db.VarChar(100)
+  porto_entrada                 String   @db.VarChar(100)
+  data_chegada                  String   @db.VarChar(50)
+  numero_fatura_proforma        String   @db.VarChar(100)
+  created_at                    DateTime @default(now())
+  updated_at                    DateTime @updatedAt
 
-  // Relacionamentos
-  transportes  Transporte[]
-  mercadorias  Mercadoria[]
-  pagamentos   Pagamento[]
-  documentos   Documento[]
+  despachante_empresa DespachanteEmpresa @relation(fields: [despachante_empresa_id], references: [id], onDelete: Cascade)
+  transporte          Transporte?
+  mercadorias         Mercadoria[]
+  pagamento           Pagamento?
+  documentos          Documento[]
 
-  @@map("pedido")
+  @@map("pedidos")
 }
 
 model Transporte {
-  id_transporte                Int      @id @default(autoincrement())
-  pedido_id                    Int
-  meio_transporte              String?  @db.VarChar(100)
-  nacionalidade_meio_transporte String? @db.VarChar(100)
-  registro_meio_transporte     String?  @db.VarChar(100)
-  num_documento_transporte     String?  @db.VarChar(100)
-  estancia_aduaneira           String?  @db.VarChar(100)
-  porto_origem                 String?  @db.VarChar(100)
-  posto_fronteirico            String?  @db.VarChar(100)
-  peso_bruto                   Decimal? @db.Decimal(10, 2)
-  local_embarque               String?  @db.VarChar(100)
-  local_desalfandegamento      String?  @db.VarChar(100)
-  pais_precedencia             String?  @db.VarChar(100)
-  referencia_processo_interno  String?  @db.VarChar(50)
-  createdAt                    DateTime @default(now())
-  updatedAt                    DateTime @updatedAt
+  id_transporte                 Int    @id @default(autoincrement())
+  pedido_id                     Int    @unique
+  meio_transporte               String @db.VarChar(100)
+  nacionalidade_meio_transporte String @db.VarChar(100)
+  registro_meio_transporte      String @db.VarChar(100)
+  num_documento_transporte      String @db.VarChar(100)
+  estancia_aduaneira            String @db.VarChar(100)
+  porto_origem                  String @db.VarChar(100)
+  posto_fronteirico             String @db.VarChar(100)
+  peso_bruto                    Float
+  local_embarque                String @db.VarChar(100)
+  local_desalfandegamento       String @db.VarChar(100)
+  pais_precedencia              String @db.VarChar(100)
+  referencia_processo_interno   String @db.VarChar(100)
 
-  // Relacionamentos
   pedido Pedido @relation(fields: [pedido_id], references: [id_pedido], onDelete: Cascade)
 
-  @@map("transporte")
+  @@map("transportes")
 }
 
 model Mercadoria {
-  id_mercadoria      Int      @id @default(autoincrement())
-  pedido_id          Int
-  linha              Int?
-  codigo_pautal      String?  @db.VarChar(100)
-  quantidade         Int?
-  pais_origem_2      String?  @db.VarChar(100)
-  peso               Decimal? @db.Decimal(10, 2)
-  moeda_estrangeira  String?  @db.VarChar(10)
-  valor_fob          Decimal? @db.Decimal(10, 2)
-  valor_frete        Decimal? @db.Decimal(10, 2)
-  valor_cif          Decimal? @db.Decimal(10, 2)
-  unidade_medida     String?  @db.VarChar(20)
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
+  id_mercadoria     Int    @id @default(autoincrement())
+  pedido_id         Int
+  linha             Int
+  codigo_pautal     String @db.VarChar(50)
+  quantidade        Int
+  pais_origem_2     String @db.VarChar(100)
+  peso              Float
+  moeda_estrangeira String @db.VarChar(10)
+  valor_fob         Float
+  valor_frete       Float
+  valor_cif         Float
+  unidade_medida    String @db.VarChar(20)
 
-  // Relacionamentos
   pedido Pedido @relation(fields: [pedido_id], references: [id_pedido], onDelete: Cascade)
 
-  @@map("mercadoria")
+  @@map("mercadorias")
 }
 
 model Pagamento {
-  id_pagamento     Int      @id @default(autoincrement())
-  pedido_id        Int
-  metodo_avaliacao String?  @db.VarChar(100)
-  banco_comercial  String?  @db.VarChar(100)
-  forma_pagamento  String?  @db.VarChar(100)
-  qtd_volume       Int?
-  codigo_volume    String?  @db.VarChar(50)
-  unidade          String?  @db.VarChar(20)
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
+  id_pagamento     Int    @id @default(autoincrement())
+  pedido_id        Int    @unique
+  metodo_avaliacao String @db.VarChar(100)
+  banco_comercial  String @db.VarChar(100)
+  forma_pagamento  String @db.VarChar(100)
+  qtd_volume       Int
+  codigo_volume    String @db.VarChar(50)
+  unidade          String @db.VarChar(20)
 
-  // Relacionamentos
   pedido Pedido @relation(fields: [pedido_id], references: [id_pedido], onDelete: Cascade)
 
-  @@map("pagamento")
+  @@map("pagamentos")
 }
 
 model Documento {
-  id_documento             Int      @id @default(autoincrement())
+  id_documento             Int    @id @default(autoincrement())
   pedido_id                Int
-  tipo_documento           String?  @db.VarChar(50)
-  caminho_arquivo          String?  @db.VarChar(255)
-  codigo_pre_licenciamento String?  @db.VarChar(100)
-  createdAt                DateTime @default(now())
-  updatedAt                DateTime @updatedAt
+  tipo_documento           String @db.VarChar(100)
+  caminho_arquivo          String @db.VarChar(500)
+  codigo_pre_licenciamento String @db.VarChar(100)
 
-  // Relacionamentos
   pedido Pedido @relation(fields: [pedido_id], references: [id_pedido], onDelete: Cascade)
 
-  @@map("documento")
-}
-
-
-model CodigoMulta {
-  id        String   @id @default(cuid())  // Identificador único com cuid()
-  codigo    String   @unique @db.VarChar(50)  // Campo único, limite de 50 caracteres
-  descricao String   @db.Text  // Descrição como texto longo
-  createdAt DateTime @default(now())  // Data de criação com valor padrão de "agora"
-  updatedAt DateTime @updatedAt  // Data de atualização automática
-
-  @@map("codigo_multa")  // Mapeamento para o nome da tabela no banco de dados
-}
-
-model CodigoRegime {
-  id        String   @id @default(cuid())
-  codigo    String   @unique @db.VarChar(50)
-  descricao String   @db.Text
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@map("codigo_regime")
-}
-
-model NacionalidadeMeioTransporte {
-  id        String   @id @default(cuid())
-  codigo    String   @unique @db.VarChar(50)
-  descricao String   @db.Text
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@map("nacionalidade_meio_transporte")
-}
-
-model PaisOrigem {
-  id        String   @id @default(cuid())
-  codigo    String   @unique @db.VarChar(50)
-  descricao String   @db.Text
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@map("pais_origem")
-}
-
-model PaisDestino {
-  id        String   @id @default(cuid())
-  codigo    String   @unique @db.VarChar(50)
-  descricao String   @db.Text
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@map("pais_destino")
-}
-
-model PortoEntradaSaida {
-  id        String   @id @default(cuid())
-  codigo    String   @unique @db.VarChar(50)
-  descricao String   @db.Text
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@map("porto_entrada_saida")
-}
-
-model MeioTransporte {
-  id        String   @id @default(cuid())
-  codigo    String   @unique @db.VarChar(50)
-  descricao String   @db.Text
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@map("meio_transporte")
-}
-
-model EstanciaAduaneira {
-  id        String   @id @default(cuid())
-  codigo    String   @unique @db.VarChar(50)
-  descricao String   @db.Text
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@map("estancia_aduaneira")
-}
-
-model PostoFronteirico {
-  id        String   @id @default(cuid())
-  codigo    String   @unique @db.VarChar(50)
-  descricao String   @db.Text
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@map("posto_fronteirico")
-}
-
-model LocalEmbarque {
-  id        String   @id @default(cuid())
-  codigo    String   @unique @db.VarChar(50)
-  descricao String   @db.Text
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@map("local_embarque")
-}
-
-model PaisProcedencia {
-  id        String   @id @default(cuid())
-  codigo    String   @unique @db.VarChar(50)
-  descricao String   @db.Text
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@map("pais_procedencia")
+  @@map("documentos")
 }

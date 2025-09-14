@@ -1,0 +1,39 @@
+Despachantes:
+
+GET    /api/despachantes                    # Todos os despachantes
+GET    /api/despachantes/:nif               # Despachante por NIF
+POST   /api/despachantes                    # Criar despachante
+PUT    /api/despachantes/:nif               # Atualizar despachante
+DELETE /api/despachantes/:nif               # Deletar despachante
+GET    /api/despachantes/:nif/fiabilizacao  # Verificar fiabilização
+POST   /api/despachantes/:nif/empresas      # Associar à empresa
+DELETE /api/despachantes/:nif/empresas/:nifEmpresa # Desassociar
+
+Empresas:
+
+GET    /api/empresas                        # Todas as empresas
+GET    /api/empresas/:nif                   # Empresa por NIF
+POST   /api/empresas                        # Criar empresa
+PUT    /api/empresas/:nif                   # Atualizar empresa
+DELETE /api/empresas/:nif                   # Deletar empresa
+GET    /api/empresas/despachante/:nifDespachante # Empresas do despachante
+
+Fiabilizações:
+GET    /api/fiabilizacoes                   # Todas as fiabilizações
+GET    /api/fiabilizacoes/cedula/:cedula    # Por cédula
+GET    /api/fiabilizacoes/despachante/:nif  # Por despachante
+POST   /api/fiabilizacoes                   # Criar fiabilização
+PUT    /api/fiabilizacoes/:cedula           # Atualizar fiabilização
+DELETE /api/fiabilizacoes/:cedula           # Deletar fiabilização
+GET    /api/fiabilizacoes/vencidas          # Fiabilizações vencidas
+GET    /api/fiabilizacoes/vencendo/:dias    # Vencendo em X dias
+
+Pedidos (atualizados):
+GET    /api/pedidos                         # Todos os pedidos
+GET    /api/pedidos/:id                     # Pedido por ID
+POST   /api/pedidos                         # Criar pedido
+PUT    /api/pedidos/:id                     # Atualizar pedido
+DELETE /api/pedidos/:id                     # Deletar pedido
+GET    /api/pedidos/empresa/:nifEmpresa     # Pedidos da empresa
+GET    /api/pedidos/despachante/:nifDespachante # Pedidos do despachante
+GET    /api/pedidos/despachante/:nifDespachante/empresa/:nifEmpresa # Específicos
